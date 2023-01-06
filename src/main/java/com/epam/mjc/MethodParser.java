@@ -1,5 +1,9 @@
 package com.epam.mjc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 public class MethodParser {
 
     /**
@@ -20,6 +24,41 @@ public class MethodParser {
      * @return {@link MethodSignature} object filled with parsed values from source string
      */
     public MethodSignature parseFunction(String signatureString) {
-        throw new UnsupportedOperationException("You should implement this method.");
+        String accessModifier;
+        String returnType;
+        String methodName;
+
+        String[] splitBeforeArguments = signatureString.split("\\(");
+        String[] notArguments = splitBeforeArguments[0].split(" ");
+
+        String argumentsString = splitBeforeArguments[1].substring(0, splitBeforeArguments[1].length() - 1);
+        String[] argumentsPairs = argumentsString.split(", ");
+
+        //get access modified, return type, method name
+        methodName = notArguments[notArguments.length - 1];
+        returnType = notArguments[notArguments.length - 2];
+        if (notArguments.length == 3) {
+            accessModifier = notArguments[0];
+        } else {
+            accessModifier = null;
+        }
+
+        System.out.println(argumentsPairs[0]);
+        //get arguments
+        List<MethodSignature.Argument> argumentsList = new ArrayList<>();
+        if (argumentsPairs.length > 1) {
+            for (int i = 0; i < argumentsPairs.length; i++) {
+                StringTokenizer stringTokenizer = new StringTokenizer(argumentsPairs[i], " ");
+                argumentsList.add(new MethodSignature.Argument(
+                        stringTokenizer.nextToken(), stringTokenizer.nextToken())
+                );
+            }
+        }
+        MethodSignature methodSignature = new MethodSignature(methodName, argumentsList);
+        methodSignature.setAccessModifier(accessModifier);
+        methodSignature.setReturnType(returnType);
+        return methodSignature;
+
+//        throw new UnsupportedOperationException("You should implement this method.");
     }
 }
