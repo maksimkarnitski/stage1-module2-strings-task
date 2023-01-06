@@ -28,6 +28,7 @@ public class MethodParser {
         String returnType;
         String methodName;
 
+        //split signature to not-arguments and arguments parts
         String[] splitBeforeArguments = signatureString.split("\\(");
         String[] notArguments = splitBeforeArguments[0].split(" ");
 
@@ -42,13 +43,11 @@ public class MethodParser {
         } else {
             accessModifier = null;
         }
-
-        System.out.println(argumentsPairs[0]);
         //get arguments
         List<MethodSignature.Argument> argumentsList = new ArrayList<>();
         if (argumentsPairs.length > 1) {
-            for (int i = 0; i < argumentsPairs.length; i++) {
-                StringTokenizer stringTokenizer = new StringTokenizer(argumentsPairs[i], " ");
+            for (String pair : argumentsPairs) {
+                StringTokenizer stringTokenizer = new StringTokenizer(pair, " ");
                 argumentsList.add(new MethodSignature.Argument(
                         stringTokenizer.nextToken(), stringTokenizer.nextToken())
                 );
@@ -58,7 +57,5 @@ public class MethodParser {
         methodSignature.setAccessModifier(accessModifier);
         methodSignature.setReturnType(returnType);
         return methodSignature;
-
-//        throw new UnsupportedOperationException("You should implement this method.");
     }
 }
